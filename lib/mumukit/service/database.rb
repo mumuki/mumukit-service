@@ -1,3 +1,6 @@
+require 'yaml'
+require 'erb'
+
 module Mumukit::Service
   module Database
     def new_database_client(database)
@@ -10,7 +13,11 @@ module Mumukit::Service
 
     def config
       environment = ENV['RACK_ENV'] || 'development'
-      @config ||= YAML.load(ERB.new(File.read('config/database.yml')).result).with_indifferent_access[environment]
+      @config ||= read_interpolated_yaml('config/database.yml').with_indifferent_access[environment]
+    end
+
+    def read_interpolated_yaml(filename)
+      YAML.load(ERB.new(File.read(filename)).result)
     end
 
     def clean!
