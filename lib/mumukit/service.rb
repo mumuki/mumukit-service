@@ -1,8 +1,13 @@
+require 'mongo'
+require 'json/ext'
+require 'active_support/all'
+
 module Mumukit
   module Service
 
   end
 end
+
 
 require 'mumukit/service/version'
 require_relative './service/id_generator'
