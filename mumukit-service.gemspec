@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 2'
 
+  spec.add_dependency 'puma'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'sinatra-cross_origin', '~> 0.3.1'
   spec.add_dependency 'mongo', '~> 2.1'
