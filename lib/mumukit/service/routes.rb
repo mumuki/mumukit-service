@@ -17,18 +17,6 @@ helpers do
     @json_body ||= JSON.parse(request.body.read) rescue nil
   end
 
-  def authorization_header
-    env['HTTP_AUTHORIZATION']
-  end
-
-  def token
-    @token ||= Mumukit::Auth::Token.decode_header(authorization_header).tap(&:verify_client!)
-  end
-
-  def permissions
-    @permissions ||= token.permissions settings.app_name
-  end
-
   def slug
     if params[:organization] && params[:repository]
       Mumukit::Service::Slug.new(params[:organization], params[:repository])
@@ -39,10 +27,6 @@ helpers do
     else
       raise Mumukit::Service::InvalidSlugFormatError.new('Slug not available')
     end
-  end
-
-  def protect!
-    permissions.protect! slug.to_s
   end
 end
 
@@ -63,20 +47,12 @@ error JSON::ParserError do
   halt 400
 end
 
-error Mumukit::Auth::InvalidTokenError do
-  halt 400
-end
-
 error Mumukit::Service::InvalidSlugFormatError do
   halt 400
 end
 
 error Mumukit::Service::DocumentValidationError do
   halt 400
-end
-
-error Mumukit::Auth::UnauthorizedAccessError do
-  halt 403
 end
 
 error Mumukit::Service::DocumentNotFoundError do
