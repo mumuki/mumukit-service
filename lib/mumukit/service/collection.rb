@@ -22,11 +22,13 @@ module Mumukit::Service
     end
 
     def find_by(args)
-      first = mongo_collection.find(args).projection(_id: 0).first
+      wrap _find_by(args)
+    end
 
-      raise Mumukit::Service::DocumentNotFoundError, "document #{args.to_json} not found" unless first
-
-      wrap first
+    def find_by!(args)
+      wrap _find_by(args).tap do |first|
+        raise Mumukit::Service::DocumentNotFoundError, "document #{args.to_json} not found" unless first
+      end
     end
 
     def insert!(guide)
@@ -38,6 +40,10 @@ module Mumukit::Service
     end
 
     private
+
+    def _find_by(args)
+      mongo_collection.find(args).projection(_id: 0).first
+    end
 
     def mongo_collection
       mongo_database.client[mongo_collection_name]
