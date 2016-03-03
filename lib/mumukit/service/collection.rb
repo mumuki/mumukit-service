@@ -22,13 +22,14 @@ module Mumukit::Service
     end
 
     def find_by(args)
-      wrap _find_by(args)
+      _find_by(args).
+          try { |it| wrap it }
     end
 
     def find_by!(args)
-      wrap _find_by(args).tap do |first|
-        raise Mumukit::Service::DocumentNotFoundError, "document #{args.to_json} not found" unless first
-      end
+      _find_by(args).
+          tap { |first| validate_presence(args, first) }.
+          try { |it| wrap it }
     end
 
     def insert!(guide)
@@ -40,6 +41,10 @@ module Mumukit::Service
     end
 
     private
+
+    def validate_presence(args, first)
+      raise Mumukit::Service::DocumentNotFoundError, "document #{args.to_json} not found" unless first
+    end
 
     def _find_by(args)
       mongo_collection.find(args).projection(_id: 0).first
