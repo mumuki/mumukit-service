@@ -26,6 +26,10 @@ module Mumukit::Service
           try { |it| wrap it }
     end
 
+    def find!(id)
+      find_by!(id: id)
+    end
+
     def find_by!(args)
       _find_by(args).
           tap { |first| validate_presence(args, first) }.
