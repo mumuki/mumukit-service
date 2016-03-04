@@ -33,10 +33,14 @@ module Mumukit::Service
 
     def json
       @json ||= defaults.
-                merge(@raw).
-                merge(transforms(@raw))
+          merge(@raw).
+          merge(transforms(@raw))
     end
   end
+end
 
-
+class Hash
+  def wrap_json
+    Mumukit::Service::JsonWrapper.new self
+  end
 end
