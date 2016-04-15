@@ -18,8 +18,8 @@ helpers do
   end
 
   def slug
-    if params[:organization] && params[:repository]
-      Mumukit::Service::Slug.new(params[:organization], params[:repository])
+    if route_slug_parts.present?
+      Mumukit::Service::Slug.new(*route_slug_parts)
     elsif subject
       Mumukit::Service::Slug.from(subject.slug)
     elsif json_body
@@ -27,6 +27,10 @@ helpers do
     else
       raise Mumukit::Service::InvalidSlugFormatError.new('Slug not available')
     end
+  end
+
+  def route_slug_parts
+    []
   end
 end
 
