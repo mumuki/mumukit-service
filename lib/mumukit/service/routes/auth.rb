@@ -19,7 +19,7 @@ helpers do
 end
 
 error Mumukit::Auth::InvalidTokenError do
-  halt 400
+  halt 401
 end
 
 error Mumukit::Auth::UnauthorizedAccessError do
