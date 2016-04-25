@@ -31,6 +31,11 @@ describe Mumukit::Service::Collection do
     it { expect(Mumukit::Test::Foos.count).to eq(3) }
   end
 
+  describe '#any?' do
+    it { expect(Mumukit::Test::Foos.any?(name: 'foo1')).to be_truthy }
+    it { expect(Mumukit::Test::Foos.any?(name: 'foo4')).to be_falsey }
+  end
+
   describe '#exists?' do
     it { expect(Mumukit::Test::Foos.exists? id1).to be_truthy }
     it { expect(Mumukit::Test::Foos.exists? '1234').to be_falsey }

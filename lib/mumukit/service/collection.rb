@@ -9,8 +9,12 @@ module Mumukit::Service
       mongo_collection.find.count
     end
 
+    def any?(criteria)
+      mongo_collection.find(criteria).count > 0
+    end
+
     def exists?(id)
-      mongo_collection.find(id: id).count > 0
+      any?(id: id)
     end
 
     def delete!(id)
