@@ -36,11 +36,11 @@ module Mumukit::Service
           try { |it| wrap it }
     end
 
-    def insert!(guide)
-      guide.validate!
+    def insert!(json)
+      json.validate!
 
       with_id new_id do |id|
-        mongo_collection.insert_one guide.raw.merge(id)
+        mongo_collection.insert_one json.raw.merge(id)
       end
     end
 
