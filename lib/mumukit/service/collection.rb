@@ -1,6 +1,10 @@
 module Mumukit::Service
   module Collection
 
+    def method_missing(name, *args, &block)
+      mongo_collection.send(name, *args, &block)
+    end
+
     def all
       project
     end
