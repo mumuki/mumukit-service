@@ -52,6 +52,10 @@ module Mumukit::Service
       end
     end
 
+    def uniq(key, filter, uniq_value)
+      distinct(key, filter).uniq { |result| result[uniq_value] }
+    end
+
     private
 
     def validate_presence(args, first)

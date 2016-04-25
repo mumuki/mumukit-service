@@ -74,4 +74,19 @@ describe Mumukit::Service::Collection do
     it { expect{Mumukit::Test::Foos.find_by!({ name: 'foo4' })}.to raise_error(Mumukit::Service::DocumentNotFoundError) }
   end
 
+  describe '#uniq' do
+    before do
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo1', bar: 'bar1' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo1', bar: 'bar1' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo1', bar: 'bar1' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo1', bar: 'bar2' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo1', bar: 'bar2' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo2', bar: 'bar3' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo2', bar: 'bar3' }}.wrap_json)
+    end
+
+    it { expect(Mumukit::Test::Foos.uniq('baz', {'baz.foo' => 'foo1'}, 'bar').as_json).
+        to eq([{ 'foo' => 'foo1', 'bar' => 'bar1' }, { 'foo' => 'foo1', 'bar' => 'bar2' }]) }
+  end
+
 end
