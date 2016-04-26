@@ -1,0 +1,8 @@
+language: ruby
+env: RACK_ENV=development
+rvm:
+ - 2.0.0
+addons:
+    code_climate:
+      repo_token: 98e49a73bc45170e285fa9382d3f6361465079a444fa8634fb91c4d27be4c38a
+env: CODECLIMATE_REPO_TOKEN=98e49a73bc45170e285fa9382d3f6361465079a444fa8634fb91c4d27be4c38a
