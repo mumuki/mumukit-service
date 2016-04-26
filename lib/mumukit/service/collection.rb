@@ -1,6 +1,10 @@
 module Mumukit::Service
   module Collection
 
+    def method_missing(name, *args, &block)
+      mongo_collection.send(name, *args, &block)
+    end
+
     def all
       project
     end
@@ -9,8 +13,12 @@ module Mumukit::Service
       mongo_collection.find.count
     end
 
+    def any?(criteria)
+      mongo_collection.find(criteria).count > 0
+    end
+
     def exists?(id)
-      mongo_collection.find(id: id).count > 0
+      any?(id: id)
     end
 
     def delete!(id)
@@ -36,12 +44,16 @@ module Mumukit::Service
           try { |it| wrap it }
     end
 
-    def insert!(guide)
-      guide.validate!
+    def insert!(json)
+      json.validate!
 
       with_id new_id do |id|
-        mongo_collection.insert_one guide.raw.merge(id)
+        mongo_collection.insert_one json.raw.merge(id)
       end
+    end
+
+    def uniq(key, filter, uniq_value)
+      distinct(key, filter).uniq { |result| result[uniq_value] }
     end
 
     private
