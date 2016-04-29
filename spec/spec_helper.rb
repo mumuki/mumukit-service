@@ -35,6 +35,10 @@ module Mumukit::Test
   end
 
   class Foo < Mumukit::Service::JsonWrapper
+
+    def initialize(it)
+      super(it.except(:id))
+    end
   end
 
   class FooArray < Mumukit::Service::JsonArrayWrapper

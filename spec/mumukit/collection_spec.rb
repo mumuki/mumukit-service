@@ -14,9 +14,9 @@ describe Mumukit::Service::Collection do
   let!(:id2) { Mumukit::Test::Foos.insert!(foo2)[:id] }
   let!(:id3) { Mumukit::Test::Foos.insert!(foo3)[:id] }
 
-  let(:foo_id1) { { name: 'foo1', surname: 'bar1', id: id1 }.as_json }
-  let(:foo_id2) { { name: 'foo2', surname: 'bar2', id: id2 }.as_json }
-  let(:foo_id3) { { name: 'foo3', surname: 'bar3', id: id3 }.as_json }
+  let(:foo_id1) { { name: 'foo1', surname: 'bar1' }.as_json }
+  let(:foo_id2) { { name: 'foo2', surname: 'bar2' }.as_json }
+  let(:foo_id3) { { name: 'foo3', surname: 'bar3' }.as_json }
 
   describe '#all' do
     let(:result) { Mumukit::Test::Foos.all.as_json[:foos] }
@@ -87,6 +87,30 @@ describe Mumukit::Service::Collection do
 
     it { expect(Mumukit::Test::Foos.uniq('baz', {'baz.foo' => 'foo1'}, 'bar').as_json).
         to eq([{ 'foo' => 'foo1', 'bar' => 'bar1' }, { 'foo' => 'foo1', 'bar' => 'bar2' }]) }
+  end
+
+  describe do
+    before do
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo1', bar: 'bar1' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo1', bar: 'bar2' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo2', bar: 'bar3' }}.wrap_json)
+      Mumukit::Test::Foos.insert!({ baz: { foo: 'foo2', bar: 'bar4' }}.wrap_json)
+    end
+
+    describe '#where' do
+      it { expect(Mumukit::Test::Foos.where({'baz.foo' => 'foo1'}, {'baz.foo' => 0}).as_json[:foos].to_json).
+          to eq([{ baz: { bar: 'bar1' }}, { baz: { bar: 'bar2' }}].to_json) }
+    end
+
+    describe '#first_by' do
+      it { expect(Mumukit::Test::Foos.first_by({'baz.foo' => 'foo1'}, {'baz.bar' => -1}, {'baz.foo' => 0}).to_json).
+          to eq({ baz: { bar: 'bar2' }}.to_json) }
+    end
+
+    describe '#order_by' do
+      it { expect(Mumukit::Test::Foos.order_by({'baz.foo' => 'foo1'}, {'baz.bar' => -1}, {'baz.foo' => 0}).to_json).
+          to eq({foos: [{ baz: { bar: 'bar2' }}, { baz: { bar: 'bar1' }}]}.to_json) }
+    end
   end
 
 end
