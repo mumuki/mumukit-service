@@ -57,16 +57,16 @@ module Mumukit::Service
     end
 
     def where(args, projection={})
-      raw = mongo_collection.find(args).projection(projection.merge(_id: 0)).map { |it| wrap it }
+      raw = find_projection(args, projection).map { |it| wrap it }
       wrap_array raw
     end
 
     def first_by(args, options, projection={})
-      mongo_collection.find(args).sort(options).projection(projection.merge(_id: 0)).first.try{ |it| wrap(it) }
+      find_projection(args, projection).sort(options).first.try{ |it| wrap(it) }
     end
 
     def order_by(args, options, projection={})
-      raw = mongo_collection.find(args).sort(options).projection(projection.merge(_id: 0)).map { |it| wrap(it) }
+      raw = find_projection(args, projection).sort(options).map { |it| wrap(it) }
       wrap_array raw
     end
 
@@ -84,8 +84,12 @@ module Mumukit::Service
       mongo_database.client[mongo_collection_name]
     end
 
+    def find_projection(args={}, projection={})
+      mongo_collection.find(args).projection(projection.merge(_id: 0))
+    end
+
     def project(&block)
-      raw = mongo_collection.find.projection(_id: 0).map { |it| wrap it }
+      raw = find_projection.map { |it| wrap it }
 
       raw = raw.select(&block) if block_given?
 
