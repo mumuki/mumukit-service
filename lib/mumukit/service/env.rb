@@ -1,4 +1,4 @@
-module Bibliotheca::Env
+module Mumukit::Service::Env
   class << self
     def atheneum_url
       ENV['MUMUKI_ATHENEUM_URL']
