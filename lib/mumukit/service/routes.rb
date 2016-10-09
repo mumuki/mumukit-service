@@ -5,8 +5,8 @@ require 'logger'
 require 'json'
 require 'yaml'
 
-access_logger = Logger.new('sinatra.log')
-error_logfile = File.new('error.log', 'a+')
+access_logger = Logger.new(File.join 'logs', 'sinatra.log')
+error_logfile = File.new(File.join 'logs', 'error.log', 'a+')
 
 configure do
   enable :cross_origin
@@ -14,7 +14,9 @@ configure do
   set :show_exceptions, false
 
   use ::Rack::CommonLogger, access_logger
-  Mongo::Logger.logger = ::Logger.new('mongo.log')
+
+  Mongo::Logger.logger = ::Logger.new(File.join 'logs', 'mongo.log')
+  Mongo::Logger.logger.level = ::Logger::INFO
 end
 
 helpers do
@@ -41,7 +43,7 @@ end
 
 before do
   content_type 'application/json', 'charset' => 'utf-8'
-  env["rack.errors"] =  error_logfile
+  env["rack.errors"] = error_logfile
 end
 
 after do

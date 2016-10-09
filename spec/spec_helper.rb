@@ -2,6 +2,8 @@ ENV['RACK_ENV'] = 'test'
 
 require 'mumukit/service'
 
+Mongo::Logger.logger.level = ::Logger::INFO
+
 RSpec::Matchers.define :json_like do |expected|
   match do |actual|
     actual.as_json.with_indifferent_access == expected.as_json.with_indifferent_access
