@@ -1,6 +1,6 @@
 require 'mongo'
 require 'json/ext'
-require 'active_support/all'
+require 'mumukit/core'
 
 module Mumukit
   module Service
