@@ -6,7 +6,7 @@ require 'json'
 require 'yaml'
 
 access_logger = Logger.new(File.join 'logs', 'sinatra.log')
-error_logfile = File.new(File.join 'logs', 'error.log', 'a+')
+error_logfile = File.new(File.join('logs', 'error.log'), 'a+')
 
 configure do
   enable :cross_origin
