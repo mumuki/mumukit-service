@@ -1,5 +1,5 @@
 module Mumukit::Service
-  class JsonArrayWrapper
+  class DocumentArray
     attr_accessor :raw
 
     def initialize(raw)
@@ -20,4 +20,7 @@ module Mumukit::Service
       {}
     end
   end
+
+  JsonArrayWrapper = DocumentArray
 end
+

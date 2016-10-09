@@ -1,5 +1,5 @@
 module Mumukit::Service
-  class JsonWrapper
+  class Document
     attr_accessor :raw
 
     def initialize(json)
@@ -37,10 +37,14 @@ module Mumukit::Service
           merge(transforms(@raw))
     end
   end
+
+  JsonWrapper = Document
 end
 
+
 class Hash
-  def wrap_json
-    Mumukit::Service::JsonWrapper.new self
+  def to_document
+    Mumukit::Service::Document.new self
   end
+  alias wrap_json to_document
 end

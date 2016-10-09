@@ -34,14 +34,14 @@ module Mumukit::Test
     end
   end
 
-  class Foo < Mumukit::Service::JsonWrapper
+  class Foo < Mumukit::Service::Document
 
     def initialize(it)
       super(it.except(:id))
     end
   end
 
-  class FooArray < Mumukit::Service::JsonArrayWrapper
+  class FooArray < Mumukit::Service::DocumentArray
     def key
       :foos
     end

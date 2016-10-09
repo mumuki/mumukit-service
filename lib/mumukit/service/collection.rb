@@ -97,11 +97,11 @@ module Mumukit::Service
     end
 
     def wrap(mongo_document)
-      Mumukit::Service::JsonWrapper.new mongo_document
+      Mumukit::Service::Document.new mongo_document
     end
 
     def wrap_array(array)
-      Mumukit::Service::JsonArrayWrapper.new array
+      Mumukit::Service::DocumentArray.new array
     end
 
     def new_id
