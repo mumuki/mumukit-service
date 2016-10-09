@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Mumukit::Service::Collection do
 
-  after do
+  before do
     Mumukit::Test::Database.clean!
   end
 
@@ -124,6 +124,19 @@ describe Mumukit::Service::Collection do
       it { expect(Mumukit::Test::Foos.count).to eq(2) }
       it { expect(Mumukit::Test::Foos.find_by!(zaraza: 5)).to json_like zaraza: 5, foo: 4, bar: 4 }
       it { expect(Mumukit::Test::Foos.find_by!(zaraza: 6)).to json_like zaraza: 6, foo: 7, bar: 7 }
+    end
+
+    describe '#migrate!' do
+      before { Mumukit::Test::Foos.insert!(Mumukit::Test::Foo.new(zaraza: 10, foo: 1, bar: 6)) }
+      before { Mumukit::Test::Foos.insert!(Mumukit::Test::Foo.new(zaraza: 11, foo: 2, bar: 6)) }
+      before { Mumukit::Test::Foos.insert!(Mumukit::Test::Foo.new(zaraza: 12, foo: 2, bar: 7)) }
+
+      before { Mumukit::Test::Foos.migrate!(foo: 2) { |it| it.bar = 9 } }
+
+      it { expect(Mumukit::Test::Foos.count).to eq(3) }
+      it { expect(Mumukit::Test::Foos.all).to eq([{zaraza: 10, foo: 1, bar: 9},
+                                                  {zaraza: 11, foo: 2, bar: 9},
+                                                  {zaraza: 12, foo: 2, bar: 9}]) }
     end
   end
 end

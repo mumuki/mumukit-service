@@ -59,7 +59,7 @@ module Mumukit::Test
   class Foo < Mumukit::Service::Document
 
     def initialize(it)
-      super(it.except(:id))
+      super(it)
     end
   end
 

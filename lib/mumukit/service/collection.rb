@@ -83,6 +83,13 @@ module Mumukit::Service
       wrap_array raw
     end
 
+    def migrate!(query={})
+      all.each do |document|
+        yield document
+        upsert_by! :id, document
+      end
+    end
+
     private
 
     def validate_presence(args, first)
