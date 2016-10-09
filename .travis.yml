@@ -1,9 +1,17 @@
 language: ruby
 rvm:
- - 2.0.0
+- 2.0.0
 services: mongodb
 addons:
-    code_climate:
-      repo_token: 98e49a73bc45170e285fa9382d3f6361465079a444fa8634fb91c4d27be4c38a
+  code_climate:
+    repo_token: 98e49a73bc45170e285fa9382d3f6361465079a444fa8634fb91c4d27be4c38a
 env:
- - CODECLIMATE_REPO_TOKEN=98e49a73bc45170e285fa9382d3f6361465079a444fa8634fb91c4d27be4c38a
+- CODECLIMATE_REPO_TOKEN=98e49a73bc45170e285fa9382d3f6361465079a444fa8634fb91c4d27be4c38a
+deploy:
+  provider: rubygems
+  api_key:
+    secure: Gw0E9N43ATQQm8eN8cAfDWcL42YtSzFRy+nD0DUlQZR57zI0QVIaYnBazkmWxpEMJjyLGjkvVntQBSUlYek9IqeZR+/gEvIM8qTR5nB+il6cdFclwuQlKHtTuUuMNfqK95Vat5KylX91d/ogr8iu2rmjN1cwAwUV+N5usKetPvrp1iU0iDO5Xst6TJ8C63Vg/X2oveBjHHAUc4JGEDAuZ/54qnkg0ZDkNmNe7mNQay6pAYa16ceTwqn6HJKzP9YTkgkbCP15W8pAipsbhALtpaAuP+TFfqB2Q5x2RtWzD27B2b6upGiKvE6cRA2X3tJ+xoUaprxV+dHBuO/p/bLYWZ/5VKL40L3IfvLYEwHG1dCuxlXUuGhZ68Opc+hPA5y97W4vZnLGlIfag3UQ34Toe7y/n3tmVS8GlrB1Wxt8Yn2RPN6Yo0qFBy51+qwx9GcXmrYRyF0Wti2vR0X/q5mywsPaijSE/ahiRNWKgPGk1+5y3CoRR/1MjkD9sZg9xWTFYQNZ1GABddwOuZQtT2H4k0izI/xCe7ff3RqV4Cy6dtgdrqhrMUCnGYZUDnrL9jTqaQbKEzdwWYzy82Q9QLibvkG7ocBrFlQ5GuxZ/ouTugOi9nwMHSStxFuUtngGK0RUvRCjuYa2gii5WDde3d7rYJ/XdDmfHZO4/xJR1ahKUP0=
+  gem: mumukit-service
+  on:
+    tags: true
+    repo: mumuki/mumukit-service
