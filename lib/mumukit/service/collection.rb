@@ -101,7 +101,7 @@ module Mumukit::Service
     end
 
     def wrap_array(array)
-      Mumukit::Service::DocumentArray.new array
+      Mumukit::Service::DocumentArray.new array, default_key: mongo_collection_name
     end
 
     def new_id
