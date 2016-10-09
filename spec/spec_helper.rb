@@ -2,6 +2,26 @@ ENV['RACK_ENV'] = 'test'
 
 require 'mumukit/service'
 
+RSpec::Matchers.define :json_like do |expected|
+  match do |actual|
+    actual.as_json.with_indifferent_access == expected.as_json.with_indifferent_access
+  end
+
+  failure_message_for_should do |actual|
+    <<-EOS
+    expected: #{expected}
+         got: #{actual}
+    EOS
+  end
+
+  failure_message_for_should_not do |actual|
+    <<-EOS
+    expected: value != #{expected}
+         got:          #{actual}
+    EOS
+  end
+end
+
 module Mumukit::Test
 
   module Database

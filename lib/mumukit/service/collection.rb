@@ -52,6 +52,19 @@ module Mumukit::Service
       end
     end
 
+    def upsert_by!(field, document)
+      query = {field => document[field]}
+      document.validate!
+
+      with_id(id_for_query(query) || new_id) do |id|
+        mongo_collection.update_one(query, document.raw.merge(id), {upsert: true})
+      end
+    end
+
+    def id_for_query(query)
+      mongo_collection.find(query).projection(id: 1).first.try { |it| it[:id] }
+    end
+
     def uniq(key, filter, uniq_value)
       distinct(key, filter).uniq { |result| result[uniq_value] }
     end
@@ -62,7 +75,7 @@ module Mumukit::Service
     end
 
     def first_by(args, options, projection={})
-      find_projection(args, projection).sort(options).first.try{ |it| wrap(it) }
+      find_projection(args, projection).sort(options).first.try { |it| wrap(it) }
     end
 
     def order_by(args, options, projection={})

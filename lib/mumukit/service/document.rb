@@ -10,6 +10,10 @@ module Mumukit::Service
       json.as_json(options)
     end
 
+    def [](key)
+      json[key]
+    end
+
     def method_missing(name, *args)
       json[name]
     end
