@@ -4,22 +4,23 @@ require 'mumukit/service'
 
 Mongo::Logger.logger.level = ::Logger::INFO
 
-RSpec::Matchers.define :json_like do |expected|
+RSpec::Matchers.define :json_like do |expected, options={}|
+  except = options[:except] || []
   match do |actual|
-    actual.as_json.with_indifferent_access == expected.as_json.with_indifferent_access
+    actual.as_json.with_indifferent_access.except(except) == expected.as_json.with_indifferent_access
   end
 
   failure_message_for_should do |actual|
     <<-EOS
-    expected: #{expected}
-         got: #{actual}
+    expected: #{expected.as_json} (#{expected.class})
+         got: #{actual.as_json} (#{actual.class})
     EOS
   end
 
   failure_message_for_should_not do |actual|
     <<-EOS
-    expected: value != #{expected}
-         got:          #{actual}
+    expected: value != #{expected.as_json} (#{expected.class})
+         got:          #{actual.as_json} (#{actual.class})
     EOS
   end
 end
@@ -59,7 +60,7 @@ module Mumukit::Test
   class Foo < Mumukit::Service::Document
 
     def initialize(it)
-      super(it.except(:id))
+      super(it)
     end
   end
 

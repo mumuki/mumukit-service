@@ -1,6 +1,7 @@
 module Mumukit::Service
   class Document
     attr_accessor :raw
+    delegate :[], to: :json
 
     def initialize(json)
       @raw = json.to_h.symbolize_keys
@@ -10,12 +11,19 @@ module Mumukit::Service
       json.as_json(options)
     end
 
-    def [](key)
-      json[key]
+    def method_missing(name, *args)
+      if args.size == 0
+        self[name]
+      elsif args.size == 1
+        self[name[0..-2]] = args.first
+      else
+        super
+      end
     end
 
-    def method_missing(name, *args)
-      json[name]
+    def []=(key, value)
+      @raw[key.to_sym] = value
+      @json = nil
     end
 
     def transforms(original)
