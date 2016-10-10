@@ -84,7 +84,7 @@ module Mumukit::Service
     end
 
     def migrate!(query={})
-      all.each do |document|
+      where(query).each do |document|
         yield document
         upsert_by! :id, document
       end
