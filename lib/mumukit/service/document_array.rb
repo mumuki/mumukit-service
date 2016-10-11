@@ -1,7 +1,9 @@
 module Mumukit::Service
   class DocumentArray
-    attr_accessor :raw
     delegate :each, to: :raw
+    attr_accessor :raw
+
+    include Enumerable
 
     def initialize(raw, options={})
       @raw = raw
