@@ -10,11 +10,11 @@ helpers do
   end
 
   def permissions
-    @permissions ||= token.permissions settings.app_name
+    @permissions ||= token.permissions
   end
 
-  def protect!
-    permissions.protect! slug.to_s
+  def protect!(scope)
+    permissions.protect! scope, slug.to_s
   end
 end
 
