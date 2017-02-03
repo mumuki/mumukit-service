@@ -90,6 +90,14 @@ module Mumukit::Service
       end
     end
 
+    def upsert_attributes!(query, attribute)
+      mongo_collection.update_one query, {'$set': attribute}, {upsert: true}
+    end
+
+    def update_attributes!(query, attribute)
+      mongo_collection.update_one query, '$set': attribute
+    end
+
     private
 
     def validate_presence(args, first)
