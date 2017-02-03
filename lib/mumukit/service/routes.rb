@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/cross_origin'
 require 'logger'
+require 'mumukit/auth'
 
 require 'json'
 require 'yaml'
@@ -26,11 +27,11 @@ helpers do
 
   def slug
     if route_slug_parts.present?
-      Mumukit::Service::Slug.new(*route_slug_parts)
+      Mumukit::Auth::Slug.join(*route_slug_parts)
     elsif subject
-      Mumukit::Service::Slug.from(subject.slug)
+      Mumukit::Auth::Slug.parse(subject.slug)
     elsif json_body
-      Mumukit::Service::Slug.from(json_body['slug'])
+      Mumukit::Auth::Slug.parse(json_body['slug'])
     else
       raise Mumukit::Service::InvalidSlugFormatError.new('Slug not available')
     end
@@ -59,16 +60,24 @@ error JSON::ParserError do
   halt 400
 end
 
-error Mumukit::Service::InvalidSlugFormatError do
-  halt 400
-end
-
 error Mumukit::Service::DocumentValidationError do
   halt 400
 end
 
 error Mumukit::Service::DocumentNotFoundError do
   halt 404
+end
+
+error Mumukit::Auth::InvalidTokenError do
+  halt 401
+end
+
+error Mumukit::Auth::UnauthorizedAccessError do
+  halt 403
+end
+
+error Mumukit::Auth::InvalidSlugFormatError do
+  halt 400
 end
 
 options '*' do
