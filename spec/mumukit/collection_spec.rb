@@ -121,11 +121,12 @@ describe Mumukit::Service::Collection do
     describe '#upsert_by!' do
       before { Mumukit::Test::Foos.upsert_by!(:zaraza, Mumukit::Test::Foo.new(zaraza: 5, foo: 6, bar: 6)) }
       before { Mumukit::Test::Foos.upsert_by!(:zaraza, Mumukit::Test::Foo.new(zaraza: 6, foo: 7, bar: 7)) }
-      before { Mumukit::Test::Foos.upsert_by!(:zaraza, Mumukit::Test::Foo.new(zaraza: 5, foo: 4, bar: 4)) }
+      before { Mumukit::Test::Foos.upsert_by!(:zaraza, Mumukit::Test::Foo.new(zaraza: 5, foo: 4)) }
 
       it { expect(Mumukit::Test::Foos.count).to eq(2) }
-      it { expect(Mumukit::Test::Foos.find_by!(zaraza: 5)).to json_like({zaraza: 5, foo: 4, bar: 4}, except: :id) }
+      it { expect(Mumukit::Test::Foos.find_by!(zaraza: 5)).to json_like({zaraza: 5, foo: 4, bar: 6}, except: :id) }
       it { expect(Mumukit::Test::Foos.find_by!(zaraza: 6)).to json_like({zaraza: 6, foo: 7, bar: 7}, except: :id) }
+
     end
 
     describe '#migrate!' do
