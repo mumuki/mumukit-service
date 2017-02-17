@@ -57,7 +57,7 @@ module Mumukit::Service
       document.validate!
 
       with_id(id_for_query(query) || new_id) do |id|
-        mongo_collection.update_one(query, document.raw.merge(id), {upsert: true})
+        mongo_collection.update_one(query, {'$set': document.raw.merge(id)}, {upsert: true})
       end
     end
 
