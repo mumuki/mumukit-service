@@ -33,7 +33,7 @@ helpers do
     elsif json_body
       Mumukit::Auth::Slug.parse(json_body['slug'])
     else
-      raise Mumukit::Service::InvalidSlugFormatError.new('Slug not available')
+      raise Mumukit::Auth::InvalidSlugFormatError.new('Slug not available')
     end
   end
 
