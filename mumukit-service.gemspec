@@ -35,5 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra-cross_origin', '~> 0.3.1'
   spec.add_dependency 'mongo', '~> 2.1'
   spec.add_dependency 'bson_ext'
-  spec.add_dependency 'mumukit-core', '~> 0.4'
+  spec.add_dependency 'mumukit-core', '~> 1.0'
 end
