@@ -50,14 +50,17 @@ end
 after do
   error_message = env['sinatra.error']
   if response.body.is_a?(Array)&& response.body[0].is_a?(String)
-    content_type 'text/html'
-    response.body = <<HTML
+    if content_type != 'application/csv'
+      content_type 'text/html'
+      response.body[0] = <<HTML
     <html>
       <body>
         #{response.body[0]}
       </body>
     </html>
 HTML
+    end
+    response.body = response.body[0]
   elsif error_message.blank?
     response.body = response.body.to_json
   else
