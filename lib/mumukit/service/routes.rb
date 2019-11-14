@@ -47,6 +47,10 @@ before do
   env["rack.errors"] = error_logfile
 end
 
+def valid_json?(error_message)
+  !!JSON.parse(error_message.message) rescue false
+end
+
 after do
   error_message = env['sinatra.error']
   if response.body.is_a?(Array)&& response.body[0].is_a?(String)
@@ -63,6 +67,8 @@ HTML
     response.body = response.body[0]
   elsif error_message.blank?
     response.body = response.body.to_json
+  elsif valid_json?(error_message)
+    response.body = error_message.message
   else
     response.body = {message: env['sinatra.error'].message}.to_json
   end
